@@ -6,6 +6,13 @@ import (
   "crypto/tls"
 )
 
+func Client(hostname string, port string, protocol string) {
+  switch protocol {
+  case "tcp" :TCPClient(hostname,port)
+  case "tls" :TLSClient(hostname,port)
+  case "udp" :UDPClient(hostname,port)
+  }
+}
 func TCPClient(hostname string, port string)  {
   log.Println("Client running")
   host := GetHost(hostname, port)

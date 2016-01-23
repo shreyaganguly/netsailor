@@ -6,6 +6,13 @@ import (
   "crypto/tls"
 )
 
+func Listener(port string,protocol string) {
+  switch protocol {
+  case "tcp": TCPListener(port)
+  case "udp": UDPListener(port)
+  case "tls": TLSListener(port)
+  }
+}
 func TCPListener(port string) {
   log.Println("Listener Running")
   host := GetHost("",port)
