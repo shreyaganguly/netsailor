@@ -39,16 +39,8 @@ func TCPListener(port string,verbose bool) {
 }
 
 func TLSListener(port string,verbose bool) {
-  log.Println("Listener running")
   host := GetHost("",port)
-  cer, err := tls.LoadX509KeyPair("server.pem", "server.key")
-  if err != nil {
-    if verbose {
-        log.Println("ERROR: ",err)
-    }
-    return
-  }
-  config := &tls.Config{Certificates: []tls.Certificate{cer}}
+  config := getCertificate(*certlocation,verbose)
   listener, err := tls.Listen("tcp",host,config)
   if err != nil {
     if verbose {

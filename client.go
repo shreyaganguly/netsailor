@@ -31,9 +31,16 @@ func TCPClient(hostname string, port string,verbose bool)  {
 
 func TLSClient(hostname string, port string,verbose bool) {
   host := GetHost(hostname,port)
-  conf := &tls.Config{
-    InsecureSkipVerify: true,
-  }
+  var conf *tls.Config
+		if *authorize {
+		conf = &tls.Config{
+			ServerName: *servername,
+		}
+   } else {
+			conf = &tls.Config{
+				InsecureSkipVerify: true,
+			}
+		}
   con, err := tls.Dial("tcp",host,conf)
   if err != nil {
     if verbose {

@@ -10,6 +10,9 @@ var (
   udpMode   = flag.Bool("u",false,"udp protocol")
   tlsMode   = flag.Bool("s", false, "tls protocol")
   verbose   = flag.Bool("v", false, "turn on verbose mode for descriptive logs")
+  authorize = flag.Bool("a",false,"verify server side(should not be used by the listener server)")
+	servername = flag.String("b","","mention the server name(must be used if -a flag is on the client side)")
+  certlocation = flag.String("c",getWorkingDirectory(),"mention the path where .key and .pem files are located(to be only used by the listener when -s mode is on)")
 )
 func main() {
    flag.Parse()
@@ -22,17 +25,25 @@ func main() {
      protocol = "tls"
    }
    if *listen {
+     if (*authorize || *servername != "") || (!(*tlsMode) && *certlocation != getWorkingDirectory()){
+       flag.Usage()
+       return
+     }
      if len(args) == 0 || len(args) > 1{
        log.Fatal("Please provide port number along with optional flags")
      } else {
        Listener(args[0], protocol,*verbose)
      }
-   } else if len(args) == 2 {
+   } else if (*authorize && *servername == "") {
+       flag.Usage()
+       return
+    }  else if len(args) == 2 {
       Client(args[0],args[1],protocol,*verbose)
    } else if len(args) != 2 {
           log.Fatal("Please provide hostname and port number with optional flags")
      } else {
      flag.Usage()
+     return
    }
 
 }
