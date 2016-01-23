@@ -26,7 +26,7 @@ func TCPClient(hostname string, port string,verbose bool)  {
     }
     return
   }
-  HandleTCPConnection(&con)
+  HandleTCPConnection(&con,verbose)
 }
 
 func TLSClient(hostname string, port string,verbose bool) {
@@ -41,7 +41,7 @@ func TLSClient(hostname string, port string,verbose bool) {
     }
     return
   }
-  HandleTLSConnection(con)
+  HandleTLSConnection(con,verbose)
 }
 
 func UDPClient(hostname string, port string,verbose bool) {
@@ -60,5 +60,5 @@ func UDPClient(hostname string, port string,verbose bool) {
     }
     return
   }
-  HandleUDPConnection(con)
+  HandleUDPConnection(con,verbose)
 }

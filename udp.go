@@ -11,24 +11,27 @@ import (
 const (
   BUFFER_LIMIT = 2<<16 -1
 )
-func HandleUDPConnection(con *net.UDPConn) {
+func HandleUDPConnection(con *net.UDPConn,verbose bool) {
 
-
-  chan_remote := readAndWriteUDP(con, os.Stdout,con, nil)
+  chan_remote := readAndWriteUDP(con, os.Stdout,con, nil,verbose)
   ra := con.RemoteAddr()
   if ra == nil {
     ra = <- chan_remote
   }
-  chan_local := readAndWriteUDP(os.Stdin,con,con,ra)
+  chan_local := readAndWriteUDP(os.Stdin,con,con,ra,verbose)
   select {
   case <- chan_local:
-    log.Println("Connection closed from local process")
+    if verbose {
+      log.Println("Connection closed from local process")
+    }
   case <- chan_remote:
-      log.Println("Connection closed from remote process")
+    if verbose {
+        log.Println("Connection closed from remote process")
+    }
   }
 }
 
-func readAndWriteUDP(r io.Reader, w io.Writer, con *net.UDPConn, ra net.Addr) <-chan net.Addr {
+func readAndWriteUDP(r io.Reader, w io.Writer, con *net.UDPConn, ra net.Addr,verbose bool) <-chan net.Addr {
 	buf := make([]byte, BUFFER_LIMIT)
 	cAddr := make(chan net.Addr)
 	go func() {
@@ -52,7 +55,9 @@ func readAndWriteUDP(r io.Reader, w io.Writer, con *net.UDPConn, ra net.Addr) <-
 			}
 			if errRead != nil {
 				if errRead != io.EOF {
-					log.Println("READ ERROR: ",errRead)
+          if verbose {
+            log.Println("READ ERROR: ",errRead)
+          }
 				}
 				break
 			}
@@ -62,7 +67,9 @@ func readAndWriteUDP(r io.Reader, w io.Writer, con *net.UDPConn, ra net.Addr) <-
 				_, errWrite = w.Write(buf[0:bytesread])
 			}
 			if errWrite != nil {
-				log.Println("WRITE ERROR: ",errWrite)
+        if verbose {
+            log.Println("WRITE ERROR: ",errWrite)
+        }
         return
 			}
 		}

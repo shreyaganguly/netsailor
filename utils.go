@@ -14,11 +14,15 @@ func GetHost(hostname string, port string) string {
   return (fmt.Sprintf("%s:%s",hostname,port))
 }
 
-func SelectChannel(ch1, ch2 <-chan bool) {
+func SelectChannel(ch1, ch2 <-chan bool,verbose bool) {
   select {
   case <-ch1:
-    log.Println("Connection closed from local process")
+    if verbose {
+      log.Println("Connection closed from local process")
+    }
   case <-ch2:
-    log.Println("Connection closed from remote process")
+    if verbose {
+      log.Println("Connection closed from remote process")
+    }
   }
 }

@@ -8,13 +8,13 @@ import (
   "io"
 )
 
-func HandleTCPConnection(con *net.Conn) {
-  chan_local := readAndWriteTCP(bufio.NewReader(os.Stdin), bufio.NewWriter(*con), con)
-  chan_remote := readAndWriteTCP(bufio.NewReader(*con), bufio.NewWriter(os.Stdout), con)
-  SelectChannel(chan_local,chan_remote)
+func HandleTCPConnection(con *net.Conn,verbose bool) {
+  chan_local := readAndWriteTCP(bufio.NewReader(os.Stdin), bufio.NewWriter(*con), con,verbose)
+  chan_remote := readAndWriteTCP(bufio.NewReader(*con), bufio.NewWriter(os.Stdout), con,verbose)
+  SelectChannel(chan_local,chan_remote,verbose)
 }
 
-func readAndWriteTCP(r *bufio.Reader, w *bufio.Writer, con *net.Conn) <-chan bool  {
+func readAndWriteTCP(r *bufio.Reader, w *bufio.Writer, con *net.Conn, verbose bool) <-chan bool  {
   c := make(chan bool)
   go func() {
     defer func() {
@@ -25,14 +25,18 @@ func readAndWriteTCP(r *bufio.Reader, w *bufio.Writer, con *net.Conn) <-chan boo
       message, errRead := r.ReadString('\n')
       if errRead != nil {
         if errRead != io.EOF {
-          log.Println("READ ERROR: ",errRead)
+          if verbose {
+            log.Println("READ ERROR: ",errRead)
+          }
         }
         break
       }
       _, errWrite := w.WriteString(message)
       w.Flush()
       if errWrite != nil {
-        log.Println("WRITE ERROR: ",errWrite)
+        if verbose {
+            log.Println("WRITE ERROR: ",errWrite)
+        }
         return
       }
     }

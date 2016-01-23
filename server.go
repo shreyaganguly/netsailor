@@ -35,7 +35,7 @@ func TCPListener(port string,verbose bool) {
       return
   	}
 
-  	HandleTCPConnection(&conn)
+  	HandleTCPConnection(&conn,verbose)
 }
 
 func TLSListener(port string,verbose bool) {
@@ -64,7 +64,7 @@ func TLSListener(port string,verbose bool) {
     }
     return
   }
-  HandleTCPConnection(&conn)
+  HandleTCPConnection(&conn,verbose)
 }
 
 func UDPListener(port string,verbose bool) {
@@ -84,5 +84,5 @@ func UDPListener(port string,verbose bool) {
     return
   }
   defer conn.Close()
-  HandleUDPConnection(conn)
+  HandleUDPConnection(conn,verbose)
 }

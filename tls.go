@@ -8,13 +8,13 @@ import (
  "os"
 )
 
-func HandleTLSConnection(con *tls.Conn) {
-  chan_local := readAndWriteTLS(bufio.NewReader(os.Stdin), bufio.NewWriter(con), con)
-  chan_remote := readAndWriteTLS(bufio.NewReader(con), bufio.NewWriter(os.Stdout), con)
-  SelectChannel(chan_local,chan_remote)
+func HandleTLSConnection(con *tls.Conn,verbose bool) {
+  chan_local := readAndWriteTLS(bufio.NewReader(os.Stdin), bufio.NewWriter(con), con, verbose)
+  chan_remote := readAndWriteTLS(bufio.NewReader(con), bufio.NewWriter(os.Stdout), con, verbose)
+  SelectChannel(chan_local,chan_remote,verbose)
 }
 
-func readAndWriteTLS(r *bufio.Reader, w *bufio.Writer, con *tls.Conn) <-chan bool {
+func readAndWriteTLS(r *bufio.Reader, w *bufio.Writer, con *tls.Conn,verbose bool) <-chan bool {
   c := make(chan bool)
   go func() {
     defer func() {
@@ -25,14 +25,18 @@ func readAndWriteTLS(r *bufio.Reader, w *bufio.Writer, con *tls.Conn) <-chan boo
       message, errRead := r.ReadString('\n')
       if errRead != nil {
         if errRead != io.EOF {
-          log.Println("READ ERROR: ",errRead)
+          if verbose {
+              log.Println("READ ERROR: ",errRead)
+          }
         }
         break
       }
       _, errWrite := w.WriteString(message)
       w.Flush()
       if errWrite != nil {
-        log.Println("WRITE ERROR: ",errWrite)
+        if verbose {
+          log.Println("WRITE ERROR: ",errWrite)
+        }
         return
       }
     }
