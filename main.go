@@ -13,9 +13,10 @@ var (
 func main() {
    flag.Parse()
    if *listen {
-     log.Println("Server Mode")
       TCPListener(*hostname,*port)
    } else {
+     TCPClient(*hostname,*port)
      log.Println("Client mode")
    }
+
 }

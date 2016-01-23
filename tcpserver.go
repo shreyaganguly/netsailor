@@ -3,18 +3,12 @@ package main
 import (
   "net"
   "log"
-  "fmt"
   "bufio"
-  "strconv"
 )
 
 func TCPListener(host string, port string) {
-  _, err := strconv.Atoi(port)
-  if err != nil {
-    log.Println("port number invalid: ",port)
-    return
-    }
-  hostname := fmt.Sprintf("%s:%s",host,port)
+  log.Println("Listener Running")
+  hostname := getHost(host,port)
   listener, err := net.Listen("tcp",hostname)
   if err != nil {
     log.Println("ERROR: ", err)
