@@ -12,7 +12,7 @@ func TCPListener(host string, port string) {
   _, err := strconv.Atoi(port)
   if err != nil {
     log.Println("port number invalid: ",port)
-    return 
+    return
     }
   hostname := fmt.Sprintf("%s:%s",host,port)
   listener, err := net.Listen("tcp",hostname)
@@ -30,7 +30,7 @@ func TCPListener(host string, port string) {
     }
     go func(c net.Conn) {
       for {
-        message, _ := bufio.NewReader(con).ReadString('\n')
+        message, _ := bufio.NewReader(c).ReadString('\n')
         log.Println(message)
       }
       }(con)

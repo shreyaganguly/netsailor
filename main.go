@@ -8,10 +8,14 @@ import (
 var (
   hostname = flag.String("b","localhost","listen on host")
   port     = flag.String("p","8000","listen on port")
+  listen  = flag.Bool("l",false,"to enable the listen mode")
 )
 func main() {
    flag.Parse()
-   log.Println("HOST NAME is",*hostname)
-   log.Println("PORT is",*port)
-   TCPListener(*hostname,*port)
+   if *listen {
+     log.Println("Server Mode")
+      TCPListener(*hostname,*port)
+   } else {
+     log.Println("Client mode")
+   }
 }
