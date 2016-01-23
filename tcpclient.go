@@ -7,10 +7,12 @@ import (
 
 func TCPClient(hostname string, port string)  {
   log.Println("Client running")
-  host := getHost(hostname, port)
-  _, err := net.Dial("tcp", host)
+  host := GetHost(hostname, port)
+  con, err := net.Dial("tcp", host)
   if err != nil {
     log.Println("ERROR: ",err)
+    return
   }
+  HandleTCPConnection(con)
 
 }
