@@ -1,20 +1,20 @@
 package main
 
 import (
-  "log"
-  "net"
-  "os"
-  "bufio"
-  "io"
+ "bufio"
+ "log"
+ "io"
+ "crypto/tls"
+ "os"
 )
 
-func HandleTCPConnection(con *net.Conn) {
-  chan_local := readAndWriteTCP(bufio.NewReader(os.Stdin), bufio.NewWriter(*con), con)
-  chan_remote := readAndWriteTCP(bufio.NewReader(*con), bufio.NewWriter(os.Stdout), con)
+func HandleTLSConnection(con *tls.Conn) {
+  chan_local := readAndWriteTLS(bufio.NewReader(os.Stdin), bufio.NewWriter(con), con)
+  chan_remote := readAndWriteTLS(bufio.NewReader(con), bufio.NewWriter(os.Stdout), con)
   SelectChannel(chan_local,chan_remote)
 }
 
-func readAndWriteTCP(r *bufio.Reader, w *bufio.Writer, con *net.Conn) <-chan bool  {
+func readAndWriteTLS(r *bufio.Reader, w *bufio.Writer, con *tls.Conn) <-chan bool {
   c := make(chan bool)
   go func() {
     defer func() {

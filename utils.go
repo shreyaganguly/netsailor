@@ -13,3 +13,12 @@ func GetHost(hostname string, port string) string {
   }
   return (fmt.Sprintf("%s:%s",hostname,port))
 }
+
+func SelectChannel(ch1, ch2 <-chan bool) {
+  select {
+  case <-ch1:
+    log.Println("Connection closed from local process")
+  case <-ch2:
+    log.Println("Connection closed from remote process")
+  }
+}
