@@ -16,7 +16,6 @@ func main() {
       TCPListener(*hostname,*port)
    } else {
      TCPClient(*hostname,*port)
-     log.Println("Client mode")
    }
 
 }

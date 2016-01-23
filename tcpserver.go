@@ -19,5 +19,5 @@ func TCPListener(host string, port string) {
   		log.Fatal(err)
   	}
 
-  	HandleTCPConnection(conn)
+  	HandleTCPConnection(&conn)
 }

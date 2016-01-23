@@ -13,6 +13,6 @@ func TCPClient(hostname string, port string)  {
     log.Println("ERROR: ",err)
     return
   }
-  HandleTCPConnection(con)
+  HandleTCPConnection(&con)
 
 }

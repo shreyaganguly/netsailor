@@ -8,9 +8,9 @@ import (
   "io"
 )
 
-func HandleTCPConnection(con net.Conn) {
-  chan_local := readAndWrite(os.Stdin, con)
-  chan_remote := readAndWrite(con, os.Stdout)
+func HandleTCPConnection(con *net.Conn) {
+  chan_local := readAndWrite(bufio.NewReader(os.Stdin), bufio.NewWriter(*con), con)
+  chan_remote := readAndWrite(bufio.NewReader(*con), bufio.NewWriter(os.Stdout), con)
   select {
     case <- chan_local:
       log.Println("Connection closed from local process")
@@ -19,26 +19,23 @@ func HandleTCPConnection(con net.Conn) {
   }
 }
 
-func readAndWrite(r io.Reader, w io.Writer) <-chan bool  {
+func readAndWrite(r *bufio.Reader, w *bufio.Writer, con *net.Conn) <-chan bool  {
   c := make(chan bool)
   go func() {
     defer func() {
-      if con, ok := w.(net.Conn); ok {
-          con.Close()
-      }
+          (*con).Close()
       c <- false
     }()
     for {
-      message, errRead := bufio.NewReader(r).ReadString('\n')
+      message, errRead := r.ReadString('\n')
       if errRead != nil {
         if errRead != io.EOF {
           log.Println("READ ERROR: ",errRead)
         }
         break
       }
-      writer := bufio.NewWriter(w)
-      _, errWrite := writer.WriteString(message)
-      writer.Flush()
+      _, errWrite := w.WriteString(message)
+      w.Flush()
       if errWrite != nil {
         log.Println("WRITE ERROR: ",errWrite)
         return
