@@ -7,17 +7,19 @@ import (
 )
 
 func TCPListener(port string) {
-  // log.Println("Listener Running")
+  log.Println("Listener Running")
   host := GetHost("",port)
   listener, err := net.Listen("tcp", host)
   	if err != nil {
   		log.Println("ERROR :", err)
+      return
   	}
   	defer listener.Close()
 
   	conn, err := listener.Accept()
   	if err != nil {
-  		log.Fatal(err)
+      log.Println("ERROR :", err)
+      return
   	}
 
   	HandleTCPConnection(&conn)
@@ -41,6 +43,24 @@ func TLSListener(port string) {
   conn, err := listener.Accept()
   if err != nil {
     log.Println("ERROR: ",err)
+    return
   }
   HandleTCPConnection(&conn)
+}
+
+func UDPListener(port string) {
+  log.Println("Listener running")
+  host := GetHost("",port)
+  ServerAddr, errAddr := net.ResolveUDPAddr("udp", host)
+  if errAddr != nil {
+    log.Println("ERROR: ",errAddr)
+    return
+  }
+  conn, err := net.ListenUDP("udp", ServerAddr)
+  defer conn.Close()
+  if err != nil {
+    log.Println("ERROR: ",err)
+    return
+  }
+  HandleUDPConnection(conn)
 }

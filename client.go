@@ -7,7 +7,7 @@ import (
 )
 
 func TCPClient(hostname string, port string)  {
-  //log.Println("Client running")
+  log.Println("Client running")
   host := GetHost(hostname, port)
   con, err := net.Dial("tcp", host)
   if err != nil {
@@ -26,7 +26,23 @@ func TLSClient(hostname string, port string) {
   con, err := tls.Dial("tcp",host,conf)
   if err != nil {
     log.Println("ERROR: ",err)
-    return 
+    return
   }
   HandleTLSConnection(con)
+}
+
+func UDPClient(hostname string, port string) {
+  log.Println("Client running")
+  host := GetHost(hostname,port)
+  connectAddr, errAddr := net.ResolveUDPAddr("udp", host)
+  if errAddr != nil {
+    log.Println("ERROR: ",errAddr)
+    return
+  }
+  con, err := net.DialUDP("udp",nil,connectAddr)
+  if err != nil {
+    log.Println("ERROR: ",err)
+    return
+  }
+  HandleUDPConnection(con)
 }
