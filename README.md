@@ -61,13 +61,13 @@ The options are as follows:
 
 ### Generating server.key and server.pem while using TLS protocol of netsailor
 
-Generate a private key
+- Generate a private key
+ 
+ openssl genrsa -out server.key 2048
 
-openssl genrsa -out server.key 2048
+- To generate a certificate
 
-To generate a certificate
-
-openssl req -new -x509 -key server.key -out server.pem -days 3650
+ openssl req -new -x509 -key server.key -out server.pem -days 3650
 
 ### Examples:
 
