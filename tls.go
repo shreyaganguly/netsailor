@@ -22,7 +22,8 @@ func readAndWriteTLS(r *bufio.Reader, w *bufio.Writer, con *tls.Conn,verbose boo
       c <- false
     }()
     for {
-      message, errRead := r.ReadString('\n')
+      buf := make([]byte, 1024)
+			message, errRead := r.Read(buf)
       if errRead != nil {
         if errRead != io.EOF {
           if verbose {
@@ -31,7 +32,7 @@ func readAndWriteTLS(r *bufio.Reader, w *bufio.Writer, con *tls.Conn,verbose boo
         }
         break
       }
-      _, errWrite := w.WriteString(message)
+      _, errWrite := w.Write(buf[:message])
       w.Flush()
       if errWrite != nil {
         if verbose {

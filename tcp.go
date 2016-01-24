@@ -22,7 +22,8 @@ func readAndWriteTCP(r *bufio.Reader, w *bufio.Writer, con *net.Conn, verbose bo
       c <- false
     }()
     for {
-      message, errRead := r.ReadString('\n')
+      buf := make([]byte, 1024)
+			message, errRead := r.Read(buf)
       if errRead != nil {
         if errRead != io.EOF {
           if verbose {
@@ -31,7 +32,7 @@ func readAndWriteTCP(r *bufio.Reader, w *bufio.Writer, con *net.Conn, verbose bo
         }
         break
       }
-      _, errWrite := w.WriteString(message)
+      _, errWrite := w.Write(buf[:message])
       w.Flush()
       if errWrite != nil {
         if verbose {
