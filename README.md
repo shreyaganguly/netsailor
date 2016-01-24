@@ -136,4 +136,4 @@ After the file has been transferred, the connection will close automatically.
 
 - Allowing port scanning for UDP ports as well
 - Give an option to disable DNS lookup
-- Add more interesting customization liek idle timeout etc.
+- Add more interesting customization like idle timeout etc.
