@@ -14,6 +14,7 @@ var (
 	servername = flag.String("b","","mention the server name(must be used if -a flag is on the client side)")
   certlocation = flag.String("c",getWorkingDirectory(),"mention the path where .key and .pem files are located(to be only used by the listener when -s mode is on)(default is present working directory)")
   certname     = flag.String("n", "server", "mention the name of the pem file and key file(flag should be the same name)(for the listener only)(default name server.key and server.pem)")
+  scan         = flag.Bool("z", false, "just scan for listening daemons(valid for tls and tcp protocols only), without sending any data to them(should not be used with -l flag)")
 )
 func main() {
    flag.Parse()
@@ -26,11 +27,11 @@ func main() {
      protocol = "tls"
    }
    if *listen {
-     if (*authorize || *servername != "") || (!(*tlsMode) && *certlocation != getWorkingDirectory()){
+     if (*authorize || *servername != "") || (!(*tlsMode) && *certlocation != getWorkingDirectory()) || *scan {
        flag.Usage()
        return
      }
-     if len(args) == 0 || len(args) > 1{
+     if len(args) == 0 || len(args) > 1 {
        log.Fatal("Please provide port number along with optional flags")
      } else {
        Listener(args[0], protocol,*verbose)
