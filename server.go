@@ -40,7 +40,7 @@ func TCPListener(port string,verbose bool) {
 
 func TLSListener(port string,verbose bool) {
   host := GetHost("",port)
-  config := getCertificate(*certlocation,verbose)
+  config := getCertificate(*certlocation, *certname, verbose)
   listener, err := tls.Listen("tcp",host,config)
   if err != nil {
     if verbose {

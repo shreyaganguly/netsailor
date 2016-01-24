@@ -33,7 +33,7 @@ func getWorkingDirectory() string{
 	wd,_ := os.Getwd()
 	return wd
 }
-func getCertificate(certLocation string,verbose bool) *tls.Config {
+func getCertificate(certLocation string, certName string, verbose bool) *tls.Config {
   defer func() {
     _ = os.Chdir(getWorkingDirectory())
   }()
@@ -41,13 +41,15 @@ func getCertificate(certLocation string,verbose bool) *tls.Config {
   if cherr != nil {
     log.Fatal("No such path exists")
   }
-  if _, errkey := os.Stat("server.key"); os.IsNotExist(errkey) {
+  key := certName+".key"
+  pem := certName+".pem"
+  if _, errkey := os.Stat(key); os.IsNotExist(errkey) {
    log.Fatal("server.key file missing")
 }
-if _, errpem := os.Stat("server.pem"); os.IsNotExist(errpem) {
+if _, errpem := os.Stat(pem); os.IsNotExist(errpem) {
  log.Fatal("server.pem file missing")
 }
-  cer, err := tls.LoadX509KeyPair("server.pem", "server.key")
+  cer, err := tls.LoadX509KeyPair(pem, key)
   if err != nil {
     if verbose {
       log.Println(err)

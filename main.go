@@ -12,7 +12,8 @@ var (
   verbose   = flag.Bool("v", false, "turn on verbose mode for descriptive logs")
   authorize = flag.Bool("a",false,"verify server side(should not be used by the listener server)")
 	servername = flag.String("b","","mention the server name(must be used if -a flag is on the client side)")
-  certlocation = flag.String("c",getWorkingDirectory(),"mention the path where .key and .pem files are located(to be only used by the listener when -s mode is on)")
+  certlocation = flag.String("c",getWorkingDirectory(),"mention the path where .key and .pem files are located(to be only used by the listener when -s mode is on)(default is present working directory)")
+  certname     = flag.String("n", "server", "mention the name of the pem file and key file(flag should be the same name)(for the listener only)(default name server.key and server.pem)")
 )
 func main() {
    flag.Parse()
