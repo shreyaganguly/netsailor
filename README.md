@@ -1,13 +1,15 @@
-## Net-sailor
-The Net-Sailor is a simple implementation of the netcat utility in go that allows to listen and send data over SSL,TCP and UDP protocols.
+## netsailor
+The netsailor is a simple implementation of the netcat utility in go that allows to listen and send data over SSL,TCP and UDP protocols.
 
 ### Motivation
-The conventional netcat that is used doesn't support ssl connection or any kind of authentication as such.So I thought it will be of use to add SSL protocol and thereby it intrigued me to design netcat command utility purely in golang and adding extra functionality of supporting ssl protocols.The name net sailor itself comes from the fact that this command line utility is sails across tcp,udp and tls(ssl) protocols.
+The conventional netcat that is used doesn't support TLS connection or any kind of authentication as such.So I thought it will be of use to add TLS protocol and thereby it intrigued me to design netcat command utility purely in golang and adding extra functionality of supporting TLS protocols.The name net sailor itself comes from the fact that this command line utility is sails across tcp,udp and tls(ssl) protocols.
 
 ### Installation
 
-- Just run :
+- Clone the project and build it
+
   ```
+  $ git clone https://github.com/gophergala2016/skeddy.git
   $ go build
   ```
 
@@ -26,7 +28,7 @@ netsailor [-l] [-u] [-s] [-c] [-n] [-v] [port]
 
 ### Description:
 
-The utility allows to listen UDP\TCP\SSl ports and send data to remote ports over TCP\UDP\SSL. Main usage scenario is testing network protocols and accessibility of the open ports.
+The utility allows to listen UDP\TCP\TLS ports and send data to remote ports over TCP\UDP\TLS. Main usage scenario is testing network protocols and accessibility of the open ports.
 
 The options are as follows:
 
@@ -37,7 +39,7 @@ The options are as follows:
 	Use UDP instead of the default option of TCP.
 
 ``` -s ```
-	Use SSL instead of the default option of TCP.
+	Use TLS instead of the default option of TCP.
 
 ``` -v ```
 	Have netsailor give more verbose output.
@@ -52,12 +54,12 @@ The options are as follows:
 	Have client mention the range of ports to be scanned to check whether they are open or not(should be used with tcp and ssl mode only).
 
 ``` -c  path/to/cert/files ```
-	Have listener mention the path to the certificate files(.key and .pem file) in SSL connection(to be used only when -s flag is set)(default is present working directory).
+	Have listener mention the path to the certificate files(.key and .pem file) in TLS connection(to be used only when -s flag is set)(default is present working directory).
 
 ``` -n  certificatename ```
-	Have listener mention the name of the certificate file(.key and .pem file) in SSL connection(to be used only when -s flag is set)(default name is server.key and server.pem).
+	Have listener mention the name of the certificate file(.key and .pem file) in TLS connection(to be used only when -s flag is set)(default name is server.key and server.pem).
 
-### Generating server.key and server.pem while using SSL protocol of netsailor
+### Generating server.key and server.pem while using TLS protocol of netsailor
 
 Generate a private key
 
@@ -85,15 +87,15 @@ Open a TCP connection to port 53 of hostname in verbose with connection logs.
 
 **$ netsailor -s hostname 53**
 
-Open a SSL connection to port 53 of hostname.
+Open a TLS connection to port 53 of hostname.
 
 **$ netsailor -s -a -b servername hostname 8000**
 
-Open a SSL connection to port 8000 of hostname and verify servername before sending stdin to remote host, and send data from remote host to stdout.
+Open a TLS connection to port 8000 of hostname and verify servername before sending stdin to remote host, and send data from remote host to stdout.
 
 **$ netsailor -z hostname 8000-8003**
 
-It will scan all the open ports from 8000 to 8003 If -s is mentioned it will scan for all open SSL ports within the specified range else it will scan for open tcp ports.
+It will scan all the open ports from 8000 to 8003 If -s is mentioned it will scan for all open TLS ports within the specified range else it will scan for open tcp ports.
 
 ## Listener Side:
 
@@ -107,7 +109,7 @@ Listen on UDP port 3000, and once there is a connection, send stdin to the remot
 
 **$ netsailor -s -l 3000**
 
-Listen on SSL port 3000, and once there is a connection, send stdin to the remote host, and send data from the remote host to stdout.
+Listen on TLS port 3000, and once there is a connection, send stdin to the remote host, and send data from the remote host to stdout.
 
 **$ netsailor -l -v 3000**
 
@@ -115,7 +117,7 @@ Listen on TCP port 3000, and once there is a connection, send stdin to the remot
 
 **$ netsailor -l -s -c path/to/cert/files -n certname 8000**
 
-Listen on SSL port 8000, and thereby providing the Certificates from specified path(default present working directory) and specifying the name(default "server")
+Listen on TLS port 8000, and thereby providing the Certificates from specified path(default present working directory) and specifying the name(default "server")
 
 
 ### File Transfer Examples:
@@ -129,3 +131,9 @@ Using a second machine, connect to the listening nc process, feeding it the file
 **netsailor host.example.com 1234 < filename.in**
 
 After the file has been transferred, the connection will close automatically.
+
+## In Bucket List
+
+- Allowing port scanning for UDP ports as well
+- Give an option to disable DNS lookup
+- Add more interesting customization liek idle timeout etc.
