@@ -18,6 +18,10 @@ func Client(hostname string, port string, protocol string,verbose bool) {
 }
 
 func TCPClient(hostname string, port string,verbose bool)  {
+  if *scan {
+    checkForOpenPorts(hostname, port, "tcp", verbose)
+    return
+  }
   host := GetHost(hostname, port)
   con, err := net.Dial("tcp", host)
   if err != nil {
@@ -30,6 +34,10 @@ func TCPClient(hostname string, port string,verbose bool)  {
 }
 
 func TLSClient(hostname string, port string,verbose bool) {
+  if *scan {
+    checkForOpenPorts(hostname, port , "tls", verbose)
+    return
+  }
   host := GetHost(hostname,port)
   var conf *tls.Config
 		if *authorize {
@@ -52,6 +60,9 @@ func TLSClient(hostname string, port string,verbose bool) {
 }
 
 func UDPClient(hostname string, port string,verbose bool) {
+  if *scan {
+    log.Fatal("OOPS!! this is not implemented yet")
+  }
   host := GetHost(hostname,port)
   connectAddr, errAddr := net.ResolveUDPAddr("udp", host)
   if errAddr != nil {

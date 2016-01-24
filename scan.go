@@ -6,13 +6,12 @@ import (
 	"net"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func listenToPorts(host string, lower int, upper int, protocol string, verbose bool) {
 	var err error
 	for i := lower; i <= upper; i++ {
-		hostname := getHost(host, strconv.Itoa(i))
+		hostname := GetHost(host, strconv.Itoa(i))
 		switch protocol {
 		case "tcp":
 			_, err = net.Dial(protocol, hostname)

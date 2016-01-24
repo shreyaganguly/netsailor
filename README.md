@@ -57,7 +57,15 @@ The options are as follows:
 ``` -n  certificatename ```
 	Have listener mention the name of the certificate file(.key and .pem file) in SSL connection(to be used only when -s flag is set)(default name is server.key and server.pem).
 
+### Generating server.key and server.pem while using SSL protocol of netsailor
 
+Generate a private key
+
+openssl genrsa -out server.key 2048
+
+To generate a certificate
+
+openssl req -new -x509 -key server.key -out server.pem -days 3650
 
 ### Examples:
 
