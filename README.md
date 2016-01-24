@@ -1,5 +1,5 @@
 ## netsailor
-The netsailor is a simple implementation of the netcat utility in go that allows to listen and send data over SSL,TCP and UDP protocols.
+The netsailor is a simple implementation of the netcat utility in go that allows to listen and send data over TLS(SSL),TCP and UDP protocols.
 
 ### Motivation
 The conventional netcat that is used doesn't support TLS connection or any kind of authentication as such.So I thought it will be of use to add TLS protocol and thereby it intrigued me to design netcat command utility purely in golang and adding extra functionality of supporting TLS protocols.The name net sailor itself comes from the fact that this command line utility is sails across tcp,udp and tls(ssl) protocols.
