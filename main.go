@@ -20,6 +20,9 @@ func main() {
    flag.Parse()
    args := flag.Args()
    protocol := "tcp"
+   if *udpMode && *tlsMode {
+     log.Fatal("UDP and TLS cannot be used together to specify the protocol")
+   }
    if *udpMode {
      protocol = "udp"
    }
